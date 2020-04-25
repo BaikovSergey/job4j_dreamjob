@@ -1,4 +1,4 @@
-package ru.job4j;
+package ru.job4j.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -6,12 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class PostServlet extends HttpServlet {
+public class CandidateEditServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        super.doGet(req, resp);
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
-        Store.instOf().savePost(new Post(0, req.getParameter("name"), req.getParameter("description")));
-        resp.sendRedirect(req.getContextPath() + "/post/posts.jsp");
+        super.doPost(req, resp);
     }
 }
