@@ -1,6 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.Store" %>
-<%@ page import="ru.job4j.Post" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -30,6 +28,7 @@
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/candidates.do" method="post">
                     <div class="form-group">
+                        <label>Имя</label>
                         <input type="text" class="form-control" name="name">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>

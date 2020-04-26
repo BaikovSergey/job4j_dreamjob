@@ -10,7 +10,7 @@ public class PostEditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        req.getRequestDispatcher("/post/edit.jsp").forward(req, resp);
     }
 
     @Override
