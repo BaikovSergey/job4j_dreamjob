@@ -17,9 +17,9 @@ public class Store {
     private static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
 
     private Store() {
-        posts.put(1, new Post(1, "Junior Java Job", "Vacancy"));
-        posts.put(2, new Post(2, "Middle Java Job", "Vacancy"));
-        posts.put(3, new Post(3, "Senior Java Job", "Vacancy"));
+        posts.put(1, new Post(1, "Junior Java Job", ""));
+        posts.put(2, new Post(2, "Middle Java Job", ""));
+        posts.put(3, new Post(3, "Senior Java Job", ""));
         candidates.put(1, new Candidate(1, "Junior Java"));
         candidates.put(2, new Candidate(2, "Middle Java"));
         candidates.put(3, new Candidate(3, "Senior Java"));
