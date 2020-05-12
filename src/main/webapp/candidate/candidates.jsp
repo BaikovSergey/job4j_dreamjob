@@ -43,6 +43,9 @@
                                 </a>
                                 <c:out value="${candidate.name}"/>
                             </td>
+                            <td>
+                                <img src="${pageContext.servletContext.contextPath}/download?name=${image}" width="100px" height="100px"/>
+                            </td>
                         </tr>
                     </c:forEach>
                     </tbody>
