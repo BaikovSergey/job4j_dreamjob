@@ -7,9 +7,10 @@ public class Candidate {
     private String name;
     private String photoId;
 
-    public Candidate(int id, String name) {
+    public Candidate(int id, String name, String photoId) {
         this.id = id;
         this.name = name;
+        this.photoId = photoId;
     }
 
     public int getId() {

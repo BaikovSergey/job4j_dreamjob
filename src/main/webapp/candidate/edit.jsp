@@ -27,13 +27,14 @@
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/candidates.do" method="post">
-                    <img src="${pageContext.servletContext.contextPath}/download?name=${image}" width="100px" height="100px"/>
                     <div class="form-group">
                         <label>Имя</label>
                         <input type="text" class="form-control" name="name">
                     </div>
-                    <button type="button" class="btn btn-primary">Загрузить фото</button>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+                <form action="<%=request.getContextPath()%>/upload" method="get">
+                    <button type="submit" class="btn btn-default">Загрузить фото</button>
                 </form>
             </div>
         </div>

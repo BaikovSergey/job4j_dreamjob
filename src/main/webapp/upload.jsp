@@ -32,7 +32,7 @@
         </tbody>
     </table>
     <h2>Upload image</h2>
-    <form action="<%=request.getContextPath()%>/upload" method="post" enctype="multipart/form-data">
+    <form action="<%=request.getContextPath()%>/candidates/edit.do" method="get" enctype="multipart/form-data">
         <div class="checkbox">
             <input type="file" name="file">
         </div>

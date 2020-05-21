@@ -23,7 +23,8 @@ public class CandidateServlet extends HttpServlet {
         Store.instOf().saveCandidate(
                 new Candidate(
                         0,
-                        req.getParameter("name")));
+                        req.getParameter("name"),
+                        req.getParameter("file")));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 }
