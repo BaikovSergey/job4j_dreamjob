@@ -1,6 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="ru.job4j.MemStore" %>
-<%@ page import="ru.job4j.Post" %>
 <!doctype html>
 <html lang="en">
 <head>
