@@ -1,50 +1,13 @@
 package ru.job4j;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class Store {
-    private static final Store INST = new Store();
+public interface Store {
+    Collection<Post> findAllPosts();
 
-    private Map<Integer, Post> posts = new ConcurrentHashMap<>();
+    Collection<Candidate> findAllCandidates();
 
-    private Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    void save(Post post);
 
-    private static AtomicInteger POST_ID = new AtomicInteger(4);
-
-    private static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
-
-    private Store() {
-        posts.put(1, new Post(1, "Junior Java Job", ""));
-        posts.put(2, new Post(2, "Middle Java Job", ""));
-        posts.put(3, new Post(3, "Senior Java Job", ""));
-        candidates.put(1, new Candidate(1, "Junior Java", "junior"));
-        candidates.put(2, new Candidate(2, "Middle Java", "middle"));
-        candidates.put(3, new Candidate(3, "Senior Java", "senior"));
-    }
-
-
-    public static Store instOf() {
-        return INST;
-    }
-
-    public Collection<Post> findAllPosts() {
-        return posts.values();
-    }
-
-    public Collection<Candidate> findAllCandidates() {
-        return candidates.values();
-    }
-
-    public void savePost(Post post) {
-        post.setId(POST_ID.incrementAndGet());
-        posts.put(post.getId(), post);
-    }
-
-    public void saveCandidate(Candidate candidate) {
-        candidate.setId(CANDIDATE_ID.incrementAndGet());
-        candidates.put(candidate.getId(), candidate);
-    }
+    Post findById(int id);
 }

@@ -45,9 +45,7 @@
                             </td>
                         </tr>
                     </c:forEach>
-                    <form action="<%=request.getContextPath()%>/index.do">
-                        <button type="submit" class="btn btn-default">Начальная страница</button>
-                    </form>
+                    <a href="<%=request.getContextPath()%>/index.do" class="btn btn-info" role="button">Начальная страница</a>
                     </tbody>
                 </table>
             </div>

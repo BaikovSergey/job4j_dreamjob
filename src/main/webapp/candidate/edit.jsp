@@ -33,9 +33,7 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
-                <form action="<%=request.getContextPath()%>/upload" method="get">
-                    <button type="submit" class="btn btn-default">Загрузить фото</button>
-                </form>
+                <a href="<%=request.getContextPath()%>/upload" class="btn btn-info" role="button">Загрузить фото</a>
             </div>
         </div>
     </div>
