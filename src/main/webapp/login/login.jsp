@@ -41,6 +41,7 @@
                 <a class="nav-link" href="<%=request.getContextPath()%>/auth.do"> <c:out value="${user.name}"/> | Войти</a>
             </li>
         </ul>
+    </div>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
