@@ -21,7 +21,25 @@
 </head>
 <body>
 <div class="container pt-3">
-
+    <div class="row">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/posts.do">Вакансии</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidates.do">Кандидаты</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/posts/edit.do">Добавить вакансию</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/candidates/edit.do">Добавить кандидата</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="<%=request.getContextPath()%>/auth.do"> <c:out value="${user.name}"/> | Войти</a>
+            </li>
+        </ul>
+    </div>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
@@ -45,7 +63,6 @@
                             </td>
                         </tr>
                     </c:forEach>
-                    <a href="<%=request.getContextPath()%>/index.do" class="btn btn-info" role="button">Начальная страница</a>
                     </tbody>
                 </table>
             </div>
