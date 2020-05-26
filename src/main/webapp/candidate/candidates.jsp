@@ -42,12 +42,11 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${candidate.name}"/>
-                                <c:out value="${candidate.photoId}"/>
                             </td>
-                            <td>
+                            <td style="text-align:right">
                                 <img src="${pageContext.servletContext.contextPath}/download?name=${image}" width="100px" height="100px"/>
                             </td>
-                            <td>
+                            <td style="text-align:right">
                                 <a href="<%=request.getContextPath()%>/download" class="btn btn-info" role="button">Скачать фото</a>
                             </td>
                         </tr>
