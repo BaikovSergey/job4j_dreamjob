@@ -1,5 +1,6 @@
 package ru.job4j.servlets;
 
+import ru.job4j.PsqlStore;
 import ru.job4j.User;
 
 import javax.servlet.ServletException;
@@ -20,15 +21,13 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        if ("root@local".equals(email) && "root".equals(password)) {
+        User user = PsqlStore.instOf().findUserByEmail(email);
+        if (user != null && (user.getEmail().equals(email) && user.getPassword().equals(password))) {
             HttpSession sc = req.getSession();
-            User admin = new User(email, password);
-            admin.setName("Admin");
-            admin.setEmail(email);
-            sc.setAttribute("user", admin);
+            sc.setAttribute("user", user);
             resp.sendRedirect(req.getContextPath() + "/posts.do");
         } else {
-            req.setAttribute("error", "Не верный email или пароль");
+            req.setAttribute("error", "Неверный email или пароль");
             req.getRequestDispatcher("/login/login.jsp").forward(req, resp);
         }
     }
