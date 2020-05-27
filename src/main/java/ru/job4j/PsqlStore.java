@@ -55,7 +55,8 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    posts.add(new Post(it.getInt("id"), it.getString("name"), it.getString("description")));
+                    posts.add(new Post(it.getInt("id"), it.getString("name"),
+                            it.getString("description")));
                 }
             }
         } catch (Exception e) {
@@ -72,13 +73,32 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"), it.getString("photoId")));
+                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"),
+                            it.getString("photoId")));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return candidates;
+    }
+
+    @Override
+    public Collection<User> findAllUsers() {
+        List<User> users = new ArrayList<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM users")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    users.add(new User(it.getInt("id"), it.getString("name"),
+                            it.getString("email"), it.getString("password")));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     @Override
@@ -92,7 +112,8 @@ public class PsqlStore implements Store {
 
     private Post createPost(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name, description) VALUES (?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(name, description) VALUES (?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
@@ -110,7 +131,8 @@ public class PsqlStore implements Store {
 
     private void updatePost(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE post SET post_name = ?, post_description = ? WHERE post_id = ?", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("UPDATE post SET name = ?, description = ? WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
             ps.setString(2, post.getDescription());
@@ -137,7 +159,8 @@ public class PsqlStore implements Store {
 
     private Candidate createCandidate(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name, photoId) VALUES (?, ?)", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(name, photoId) VALUES (?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
             ps.setString(2, candidate.getPhotoId());
@@ -155,7 +178,8 @@ public class PsqlStore implements Store {
 
     private void updateCandidate(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate SET candidate_name = ?, candidate_photiId = ? WHERE candidate_id = ?", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate SET name = ?, photoid = ? WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
             ps.setString(2, candidate.getPhotoId());
@@ -172,15 +196,66 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public void saveUser(User user) {
+        if (user.getId() == 0) {
+            createUser(user);
+        } else {
+            updateUser(user);
+        }
+    }
+
+    private User createUser(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO users(name, email, password) VALUES (?, ?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    private void updateUser(User user) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, user.getName());
+            ps.setString(2, user.getEmail());
+            ps.setString(2, user.getPassword());
+            ps.setInt(3, user.getId());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    user.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public Post findPostById(int id) {
         Post result = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE candidate_id = ?", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()){
                 while (it.next()) {
-                    result = new Post(it.getInt("id"), it.getString("name"), it.getString("description"));
+                    result = new Post(it.getInt("id"), it.getString("name"),
+                            it.getString("description"));
                 }
             }
         } catch (Exception e) {
@@ -193,12 +268,34 @@ public class PsqlStore implements Store {
     public Candidate findCandidateById(int id) {
         Candidate result = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM post WHERE candidate_id = ?", PreparedStatement.RETURN_GENERATED_KEYS)
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM candidate WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()){
                 while (it.next()) {
-                    result = new Candidate(it.getInt("id"), it.getString("name"), it.getString("photoId"));
+                    result = new Candidate(it.getInt("id"), it.getString("name"),
+                            it.getString("photoId"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public User findUserById(int id) {
+        User result = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM users WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet it = ps.executeQuery()){
+                while (it.next()) {
+                    result = new User(it.getInt("id"), it.getString("name"),
+                            it.getString("email"), it.getString("password"));
                 }
             }
         } catch (Exception e) {

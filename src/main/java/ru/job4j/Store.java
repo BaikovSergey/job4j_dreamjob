@@ -7,11 +7,18 @@ public interface Store {
 
     Collection<Candidate> findAllCandidates();
 
+    Collection<User> findAllUsers();
+
     void savePost(Post post);
 
     void saveCandidate(Candidate candidate);
 
+    void saveUser(User user);
+
     Post findPostById(int id);
 
     Candidate findCandidateById(int id);
+
+    User findUserById(int id);
+
 }
