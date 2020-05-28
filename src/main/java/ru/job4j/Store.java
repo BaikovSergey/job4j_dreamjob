@@ -1,5 +1,7 @@
 package ru.job4j;
 
+import ru.job4j.servlets.CandidatePhoto;
+
 import java.util.Collection;
 
 public interface Store {
@@ -15,6 +17,8 @@ public interface Store {
 
     void saveUser(User user);
 
+    void saveCandidatePhoto(CandidatePhoto photo);
+
     Post findPostById(int id);
 
     Candidate findCandidateById(int id);
@@ -23,4 +27,5 @@ public interface Store {
 
     User findUserByEmail(String email);
 
+    String getPhotoNameById(int id);
 }

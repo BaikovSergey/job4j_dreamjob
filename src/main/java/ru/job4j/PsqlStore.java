@@ -1,6 +1,7 @@
 package ru.job4j;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import ru.job4j.servlets.CandidatePhoto;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -73,8 +74,7 @@ public class PsqlStore implements Store {
         ) {
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    candidates.add(new Candidate(it.getInt("id"), it.getString("name"),
-                            it.getString("photoId")));
+                    candidates.add(new Candidate(it.getInt("id"), it.getString("name")));
                 }
             }
         } catch (Exception e) {
@@ -163,7 +163,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setString(2, candidate.getPhotoId());
+            ps.setInt(2, candidate.getPhotoId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -182,7 +182,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
-            ps.setString(2, candidate.getPhotoId());
+            ps.setInt(2, candidate.getPhotoId());
             ps.setInt(3, candidate.getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
@@ -275,7 +275,7 @@ public class PsqlStore implements Store {
             try (ResultSet it = ps.executeQuery()){
                 while (it.next()) {
                     result = new Candidate(it.getInt("id"), it.getString("name"),
-                            it.getString("photoId"));
+                            it.getInt("photoId"));
                 }
             }
         } catch (Exception e) {
@@ -322,5 +322,70 @@ public class PsqlStore implements Store {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public String getPhotoNameById(int id) {
+        String result = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setInt(1, id);
+            try (ResultSet it = ps.executeQuery()){
+                while (it.next()) {
+                    result = it.getString("name");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    @Override
+    public void saveCandidatePhoto(CandidatePhoto photo) {
+        if (photo.getId() == 0) {
+            createCandidatePhoto(photo);
+        } else {
+            updateCandidatePhoto(photo);
+        }
+    }
+
+    private CandidatePhoto createCandidatePhoto(CandidatePhoto photo) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO photos(name, candidateid) VALUES (?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, photo.getName());
+            ps.setInt(2, photo.getCandidateId());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    photo.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return photo;
+    }
+
+    private void updateCandidatePhoto(CandidatePhoto photo) {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("UPDATE photos SET name = ?, candidateid = ? WHERE id = ?",
+                     PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, photo.getName());
+            ps.setInt(2, photo.getCandidateId());
+            ps.execute();
+            try (ResultSet id = ps.getGeneratedKeys()) {
+                if (id.next()) {
+                    photo.setId(id.getInt(1));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
