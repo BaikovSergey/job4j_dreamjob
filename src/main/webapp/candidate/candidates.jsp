@@ -46,7 +46,13 @@
                 Кандидаты
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table" style="white-space: nowrap">
+                    <colgroup>
+                        <col span="1" style="width: 100%;">
+                        <col span="1" style="width: auto;">
+                        <col span="1" style="width: auto;">
+                        <col span="1" style="width: auto;">
+                    </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">ФИО</th>
@@ -62,14 +68,21 @@
                                 <c:out value="${candidate.name}"/>
                             </td>
                             <td style="text-align:right">
-                                <img src="${pageContext.servletContext.contextPath}/download?name=${image}" width="100px" height="100px"/>
+                                <img src="<c:url value="/download?name=${candidatesPhotos[candidate.id]}"/>"
+                                     width="100px"
+                                     height="100px"/>
+                            </td>
+                            <td>
+                            <td style="text-align:right">
+                                <a href="<%=request.getContextPath()%>/upload?&candidateId=${candidate.id}">Загрузить фото</a>
                             </td>
                             <td style="text-align:right">
-                                <a href="<%=request.getContextPath()%>/download" class="btn btn-info" role="button">Скачать фото</a>
+                                <a href="<c:url value='/download?name=${candidatesPhotos[candidate.id]}'/>">Скачать
+                                    фото
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
-                    <a href="<%=request.getContextPath()%>/index.do" class="btn btn-info" role="button">Начальная страница</a>
                     </tbody>
                 </table>
             </div>

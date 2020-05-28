@@ -1,6 +1,7 @@
 package ru.job4j;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface Store {
     Collection<Post> findAllPosts();
@@ -9,11 +10,15 @@ public interface Store {
 
     Collection<User> findAllUsers();
 
+    Map<Integer, String> findAllCandidatePhoto();
+
     void savePost(Post post);
 
     void saveCandidate(Candidate candidate);
 
     void saveUser(User user);
+
+    void saveCandidatePhoto(CandidatePhoto photo, String candidateId);
 
     Post findPostById(int id);
 
@@ -23,4 +28,5 @@ public interface Store {
 
     User findUserByEmail(String email);
 
+    CandidatePhoto getPhotoByCandidateId(int id);
 }

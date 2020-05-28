@@ -4,6 +4,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import ru.job4j.Candidate;
+import ru.job4j.CandidatePhoto;
+import ru.job4j.PsqlStore;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -45,7 +48,19 @@ public class UploadServlet extends HttpServlet {
             }
             for (FileItem item : items) {
                 if (!item.isFormField()) {
-                    File file = new File(folder + File.separator + item.getName());
+                    String candidateId = req.getParameter("candidateId");
+                    String extension = item.getName().substring(item.getName().lastIndexOf("."));
+                    CandidatePhoto photo =
+                            PsqlStore.instOf().getPhotoByCandidateId(Integer.parseInt(candidateId));
+                    if (photo != null) {
+                        File file = new File(folder + File.separator + photo.getName());
+                        boolean delete = file.delete();
+                        photo.setName(candidateId + extension);
+                        PsqlStore.instOf().saveCandidatePhoto(photo, candidateId);
+                    } else {
+                        savePhotoAndCandidate(candidateId, extension);
+                    }
+                    File file = new File(folder + File.separator + candidateId + extension);
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
@@ -54,7 +69,17 @@ public class UploadServlet extends HttpServlet {
         } catch (FileUploadException e) {
             e.printStackTrace();
         }
-        doGet(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/candidates.do");
+    }
+
+    private void savePhotoAndCandidate(String candidateId, String extension) {
+        CandidatePhoto photo = new CandidatePhoto(candidateId + extension);
+        int id = Integer.parseInt(candidateId);
+        photo.setCandidateId(id);
+        PsqlStore.instOf().saveCandidatePhoto(photo, candidateId);
+        Candidate candidate = PsqlStore.instOf().findCandidateById(id);
+        candidate.setPhotoId(id);
+        PsqlStore.instOf().saveCandidate(candidate);
     }
 }
 
