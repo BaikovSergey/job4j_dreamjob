@@ -4,7 +4,7 @@ public class CandidatePhoto {
 
     private int id;
     private String name;
-    private int CandidateId;
+    private int candidateId;
 
     public CandidatePhoto(String name) {
         this.name = name;
@@ -13,7 +13,7 @@ public class CandidatePhoto {
     public CandidatePhoto(int id, String name, int candidateId) {
         this.id = id;
         this.name = name;
-        CandidateId = candidateId;
+        this.candidateId = candidateId;
     }
 
     public int getId() {
@@ -33,10 +33,10 @@ public class CandidatePhoto {
     }
 
     public int getCandidateId() {
-        return CandidateId;
+        return candidateId;
     }
 
     public void setCandidateId(int candidateId) {
-        CandidateId = candidateId;
+        this.candidateId = candidateId;
     }
 }

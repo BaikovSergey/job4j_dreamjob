@@ -367,9 +367,9 @@ public class PsqlStore implements Store {
 
     private CandidatePhoto createCandidatePhoto(CandidatePhoto photo) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO photos(name, candidateid) VALUES (?, ?)",
-                     PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
+             PreparedStatement ps =  cn.prepareStatement(
+                     "INSERT INTO photos(name, candidateid) VALUES (?, ?)",
+                     PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, photo.getName());
             ps.setInt(2, photo.getCandidateId());
             ps.execute();

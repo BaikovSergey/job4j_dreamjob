@@ -46,7 +46,13 @@
                 Кандидаты
             </div>
             <div class="card-body">
-                <table class="table">
+                <table class="table" style="white-space: nowrap">
+                    <colgroup>
+                        <col span="1" style="width: 100%;">
+                        <col span="1" style="width: auto;">
+                        <col span="1" style="width: auto;">
+                        <col span="1" style="width: auto;">
+                    </colgroup>
                     <thead>
                     <tr>
                         <th scope="col">ФИО</th>
@@ -70,9 +76,10 @@
                             <td style="text-align:right">
                                 <a href="<%=request.getContextPath()%>/upload?&candidateId=${candidate.id}">Загрузить фото</a>
                             </td>
-                            </td>
                             <td style="text-align:right">
-                                <a href="<c:url value='/download?name=${candidate.id}'/>">Download</a>
+                                <a href="<c:url value='/download?name=${candidatesPhotos[candidate.id]}'/>">Скачать
+                                    фото
+                                </a>
                             </td>
                         </tr>
                     </c:forEach>
