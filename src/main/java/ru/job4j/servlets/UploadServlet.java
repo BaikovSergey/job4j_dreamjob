@@ -4,6 +4,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import ru.job4j.Candidate;
+import ru.job4j.CandidatePhoto;
 import ru.job4j.PsqlStore;
 
 import javax.servlet.RequestDispatcher;
@@ -46,14 +48,19 @@ public class UploadServlet extends HttpServlet {
             }
             for (FileItem item : items) {
                 if (!item.isFormField()) {
-                    File file = new File(folder + File.separator + item.getName());
+                    String candidateId = req.getParameter("candidateId");
+                    String extension = item.getName().substring(item.getName().lastIndexOf("."));
+                    File file = new File(folder + File.separator + candidateId + extension);
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
-                    int candidateId = Integer.parseInt(req.getParameter("candidateId"));
-                    CandidatePhoto photo = new CandidatePhoto(item.getName());
-                    photo.setCandidateId(candidateId);
+                    int id = Integer.parseInt(req.getParameter("candidateId"));
+                    CandidatePhoto photo = new CandidatePhoto(candidateId + extension);
+                    photo.setCandidateId(id);
                     PsqlStore.instOf().saveCandidatePhoto(photo);
+                    Candidate candidate = PsqlStore.instOf().findCandidateById(id);
+                    candidate.setPhotoId(id);
+                    PsqlStore.instOf().saveCandidate(candidate);
                 }
             }
         } catch (FileUploadException e) {

@@ -1,17 +1,13 @@
 package ru.job4j;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import ru.job4j.servlets.CandidatePhoto;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 public class PsqlStore implements Store {
 
@@ -99,6 +95,23 @@ public class PsqlStore implements Store {
             e.printStackTrace();
         }
         return users;
+    }
+
+    @Override
+    public Map<Integer, String> findAllCandidatePhoto() {
+        Map<Integer, String> photos = new HashMap<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    photos.put(it.getInt("candidateid"), it.getString("name"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return photos;
     }
 
     @Override
@@ -231,8 +244,8 @@ public class PsqlStore implements Store {
         ) {
             ps.setString(1, user.getName());
             ps.setString(2, user.getEmail());
-            ps.setString(2, user.getPassword());
-            ps.setInt(3, user.getId());
+            ps.setString(3, user.getPassword());
+            ps.setInt(4, user.getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {
@@ -252,7 +265,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
-            try (ResultSet it = ps.executeQuery()){
+            try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     result = new Post(it.getInt("id"), it.getString("name"),
                             it.getString("description"));
@@ -272,7 +285,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
-            try (ResultSet it = ps.executeQuery()){
+            try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     result = new Candidate(it.getInt("id"), it.getString("name"),
                             it.getInt("photoId"));
@@ -292,7 +305,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
-            try (ResultSet it = ps.executeQuery()){
+            try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     result = new User(it.getInt("id"), it.getString("name"),
                             it.getString("email"), it.getString("password"));
@@ -312,7 +325,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, email);
-            try (ResultSet it = ps.executeQuery()){
+            try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     result = new User(it.getInt("id"), it.getString("name"),
                             it.getString("email"), it.getString("password"));
@@ -332,7 +345,7 @@ public class PsqlStore implements Store {
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
-            try (ResultSet it = ps.executeQuery()){
+            try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
                     result = it.getString("name");
                 }
@@ -378,6 +391,7 @@ public class PsqlStore implements Store {
         ) {
             ps.setString(1, photo.getName());
             ps.setInt(2, photo.getCandidateId());
+            ps.setInt(3, photo.getId());
             ps.execute();
             try (ResultSet id = ps.getGeneratedKeys()) {
                 if (id.next()) {

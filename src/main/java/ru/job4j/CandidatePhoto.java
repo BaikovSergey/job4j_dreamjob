@@ -1,4 +1,4 @@
-package ru.job4j.servlets;
+package ru.job4j;
 
 public class CandidatePhoto {
 
@@ -8,6 +8,12 @@ public class CandidatePhoto {
 
     public CandidatePhoto(String name) {
         this.name = name;
+    }
+
+    public CandidatePhoto(int id, String name, int candidateId) {
+        this.id = id;
+        this.name = name;
+        CandidateId = candidateId;
     }
 
     public int getId() {

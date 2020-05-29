@@ -12,13 +12,16 @@ import java.io.IOException;
 public class CandidateServlet extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+            IOException {
         req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
+        req.setAttribute("candidatesPhotos", PsqlStore.instOf().findAllCandidatePhoto());
         req.getRequestDispatcher("/candidate/candidates.jsp").forward(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+            IOException {
         req.setCharacterEncoding("UTF-8");
         PsqlStore.instOf().saveCandidate(
                 new Candidate(

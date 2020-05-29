@@ -1,8 +1,7 @@
 package ru.job4j;
 
-import ru.job4j.servlets.CandidatePhoto;
-
 import java.util.Collection;
+import java.util.Map;
 
 public interface Store {
     Collection<Post> findAllPosts();
@@ -10,6 +9,8 @@ public interface Store {
     Collection<Candidate> findAllCandidates();
 
     Collection<User> findAllUsers();
+
+    Map<Integer, String> findAllCandidatePhoto();
 
     void savePost(Post post);
 

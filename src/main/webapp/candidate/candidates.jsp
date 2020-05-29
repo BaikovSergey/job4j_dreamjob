@@ -62,7 +62,9 @@
                                 <c:out value="${candidate.name}"/>
                             </td>
                             <td style="text-align:right">
-                                <img src="<c:url value='/download?name=${image}'/>" width="100px" height="100px"/>
+                                <img src="<c:url value="/download?name=${candidatesPhotos[candidate.id]}"/>"
+                                     width="100px"
+                                     height="100px"/>
                             </td>
                             <td>
                             <td style="text-align:right">
@@ -70,7 +72,7 @@
                             </td>
                             </td>
                             <td style="text-align:right">
-                                <a href="<c:url value='/download?name=${image}'/>">Download</a>
+                                <a href="<c:url value='/download?name=${candidate.id}'/>">Download</a>
                             </td>
                         </tr>
                     </c:forEach>
