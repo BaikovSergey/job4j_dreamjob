@@ -338,16 +338,17 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public String getPhotoNameById(int id) {
-        String result = null;
+    public CandidatePhoto getPhotoByCandidateId(int id) {
+        CandidatePhoto result = null;
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos WHERE id = ?",
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos WHERE candidateid = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setInt(1, id);
             try (ResultSet it = ps.executeQuery()) {
                 while (it.next()) {
-                    result = it.getString("name");
+                    result = new CandidatePhoto(it.getInt("id"),
+                            it.getString("name"), it.getInt("candidateid"));
                 }
             }
         } catch (Exception e) {
@@ -357,7 +358,7 @@ public class PsqlStore implements Store {
     }
 
     @Override
-    public void saveCandidatePhoto(CandidatePhoto photo) {
+    public void saveCandidatePhoto(CandidatePhoto photo, String candidateId) {
         if (photo.getId() == 0) {
             createCandidatePhoto(photo);
         } else {
@@ -401,5 +402,24 @@ public class PsqlStore implements Store {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private CandidatePhoto candidateHasPhoto(String candidateId) {
+        CandidatePhoto result = null;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos WHERE "
+                             + " candidateid = ?", PreparedStatement.RETURN_GENERATED_KEYS)
+        ) {
+            ps.setString(1, candidateId);
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    result = new CandidatePhoto(it.getInt("id"), it.getString("name"),
+                            it.getInt("photoid"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

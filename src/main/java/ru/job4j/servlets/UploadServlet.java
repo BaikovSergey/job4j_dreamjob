@@ -50,23 +50,36 @@ public class UploadServlet extends HttpServlet {
                 if (!item.isFormField()) {
                     String candidateId = req.getParameter("candidateId");
                     String extension = item.getName().substring(item.getName().lastIndexOf("."));
+                    CandidatePhoto photo =
+                            PsqlStore.instOf().getPhotoByCandidateId(Integer.parseInt(candidateId));
+                    if (photo != null) {
+                        File file = new File(folder + File.separator + photo.getName());
+                        boolean delete = file.delete();
+                        photo.setName(candidateId + extension);
+                        PsqlStore.instOf().saveCandidatePhoto(photo, candidateId);
+                    } else {
+                        savePhotoAndCandidate(candidateId, extension);
+                    }
                     File file = new File(folder + File.separator + candidateId + extension);
                     try (FileOutputStream out = new FileOutputStream(file)) {
                         out.write(item.getInputStream().readAllBytes());
                     }
-                    int id = Integer.parseInt(req.getParameter("candidateId"));
-                    CandidatePhoto photo = new CandidatePhoto(candidateId + extension);
-                    photo.setCandidateId(id);
-                    PsqlStore.instOf().saveCandidatePhoto(photo);
-                    Candidate candidate = PsqlStore.instOf().findCandidateById(id);
-                    candidate.setPhotoId(id);
-                    PsqlStore.instOf().saveCandidate(candidate);
                 }
             }
         } catch (FileUploadException e) {
             e.printStackTrace();
         }
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
+    }
+
+    private void savePhotoAndCandidate(String candidateId, String extension) {
+        CandidatePhoto photo = new CandidatePhoto(candidateId + extension);
+        int id = Integer.parseInt(candidateId);
+        photo.setCandidateId(id);
+        PsqlStore.instOf().saveCandidatePhoto(photo, candidateId);
+        Candidate candidate = PsqlStore.instOf().findCandidateById(id);
+        candidate.setPhotoId(id);
+        PsqlStore.instOf().saveCandidate(candidate);
     }
 }
 

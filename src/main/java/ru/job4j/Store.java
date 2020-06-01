@@ -18,7 +18,7 @@ public interface Store {
 
     void saveUser(User user);
 
-    void saveCandidatePhoto(CandidatePhoto photo);
+    void saveCandidatePhoto(CandidatePhoto photo, String candidateId);
 
     Post findPostById(int id);
 
@@ -28,5 +28,5 @@ public interface Store {
 
     User findUserByEmail(String email);
 
-    String getPhotoNameById(int id);
+    CandidatePhoto getPhotoByCandidateId(int id);
 }
