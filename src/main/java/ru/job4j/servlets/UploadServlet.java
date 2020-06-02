@@ -19,16 +19,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class UploadServlet extends HttpServlet {
 
+    private final static Logger LOGGER = Logger.getLogger(UploadServlet.class.getName());
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<String> images = new ArrayList<>();
-        for (File name : new File("images").listFiles()) {
-            images.add(name.getName());
-        }
-        req.setAttribute("images", images);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/upload.jsp");
         dispatcher.forward(req, resp);
     }
@@ -54,7 +53,7 @@ public class UploadServlet extends HttpServlet {
                             PsqlStore.instOf().getPhotoByCandidateId(Integer.parseInt(candidateId));
                     if (photo != null) {
                         File file = new File(folder + File.separator + photo.getName());
-                        boolean delete = file.delete();
+                        file.delete();
                         photo.setName(candidateId + extension);
                         PsqlStore.instOf().saveCandidatePhoto(photo, candidateId);
                     } else {
@@ -67,7 +66,7 @@ public class UploadServlet extends HttpServlet {
                 }
             }
         } catch (FileUploadException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "File doesn't load", e);
         }
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }

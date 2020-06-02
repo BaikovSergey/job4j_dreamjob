@@ -8,12 +8,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PsqlStore implements Store {
+
+    private final static Logger LOGGER = Logger.getLogger(PsqlStore.class.getName());
 
     private final BasicDataSource pool = new BasicDataSource();
 
     private PsqlStore() {
+        init();
+    }
+
+    private void init() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(
                 new FileReader("db.properties")
@@ -57,7 +65,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return posts;
     }
@@ -74,7 +82,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return candidates;
     }
@@ -92,7 +100,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return users;
     }
@@ -109,7 +117,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return photos;
     }
@@ -137,7 +145,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return post;
     }
@@ -157,7 +165,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
     }
 
@@ -184,7 +192,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return candidate;
     }
@@ -204,7 +212,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
     }
 
@@ -232,7 +240,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return user;
     }
@@ -253,7 +261,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
     }
 
@@ -272,7 +280,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return result;
     }
@@ -292,7 +300,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return result;
     }
@@ -312,7 +320,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return result;
     }
@@ -332,7 +340,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return result;
     }
@@ -352,7 +360,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return result;
     }
@@ -380,7 +388,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
         return photo;
     }
@@ -400,26 +408,7 @@ public class PsqlStore implements Store {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
         }
-    }
-
-    private CandidatePhoto candidateHasPhoto(String candidateId) {
-        CandidatePhoto result = null;
-        try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM photos WHERE "
-                             + " candidateid = ?", PreparedStatement.RETURN_GENERATED_KEYS)
-        ) {
-            ps.setString(1, candidateId);
-            try (ResultSet it = ps.executeQuery()) {
-                while (it.next()) {
-                    result = new CandidatePhoto(it.getInt("id"), it.getString("name"),
-                            it.getInt("photoid"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 }
