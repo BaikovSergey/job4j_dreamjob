@@ -23,7 +23,9 @@ public class RegServlet extends HttpServlet {
                 new User(
                         req.getParameter("name"),
                         req.getParameter("email"),
-                        req.getParameter("password")));
-        req.getRequestDispatcher("/login/login.jsp").forward(req, resp);
+                        req.getParameter("password")
+                )
+        );
+        resp.sendRedirect(req.getContextPath() + "/auth.do");
     }
 }
