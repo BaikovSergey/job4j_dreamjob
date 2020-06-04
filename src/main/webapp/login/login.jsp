@@ -49,7 +49,9 @@
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
-                    <a> <c:out value="${error}"/></a>
+                    <div>
+                        <label><c:out value="${error}"/></label>
+                    </div>
                     <div class="form-group">
                         <label>Эл. почта</label>
                         <input type="text" class="form-control" name="email">
