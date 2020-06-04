@@ -7,6 +7,29 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            var result = true;
+            var fields = [document.getElementById("inputFName"),
+                document.getElementById("inputLName"), document.getElementById("inputDescription")];
+
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].value === "") {
+                    result = false;
+                    break;
+                }
+            }
+
+            if (!result) {
+                for (var j = 0; j < fields.length; j++) {
+                    if (fields[j].value === "") {
+                        alert("Please fill this field: " + $(fields[j]).attr('name'));
+                    }
+                }
+            }
+            return result;
+        }
+    </script>
 </head>
 <body>
 
@@ -18,23 +41,23 @@
     <h2>Horizontal form</h2>
     <form>
         <div class="form-group row">
-            <label for="inputEmail" class="col-sm-2 col-form-label">First name</label>
+            <label for="inputFName" class="col-sm-2 col-form-label">First name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputEmail"
+                <input type="text" class="form-control" name="First name" id="inputFName"
                        placeholder="Enter first name">
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Last name</label>
+            <label for="inputLName" class="col-sm-2 col-form-label">Last name</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputPassword"
+                <input type="text" class="form-control" name="Last name" id="inputLName"
                        placeholder="Enter last name">
             </div>
         </div>
         <div class="form-group row">
             <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputDescription"
+                <input type="text" class="form-control" name="Description" id="inputDescription"
                        placeholder="About yourself">
             </div>
         </div>
@@ -69,7 +92,8 @@
         </div>
         <div class="form-group row">
             <div class="col-sm-10">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary"
+                        onclick="return validate();">Sign in</button>
             </div>
         </div>
     </form>
