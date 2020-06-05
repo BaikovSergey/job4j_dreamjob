@@ -29,6 +29,24 @@
             }
             return result;
         }
+        function addRow() {
+            var fName = document.getElementById("inputFName").value;
+            var lName = document.getElementById("inputLName").value;
+            var desc = document.getElementById("inputDescription").value;
+            var checkedValue = null;
+            var inputElements = document.getElementsByClassName('form-check-input');
+            for (var i = 0; i < inputElements.length; i++) {
+                if (inputElements[i].checked) {
+                    checkedValue = inputElements[i].value;
+                    break;
+                }
+            }
+            $('#table tr:last').after('<tr>' +
+                '<td>' + fName + '</td>' +
+                '<td>' + lName + '</td>' +
+                '<td>' + checkedValue + '</td>' +
+                '<td>' + desc + '</td></tr>');
+        }
     </script>
 </head>
 <body>
@@ -66,14 +84,16 @@
                 <label class="col-form-label col-sm-2">Sex</label>
                 <div class="col-sm-10">
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
-                        <label class="form-check-label" for="gridRadios1">
+                        <input class="form-check-input" type="radio" name="sexCheckbox" id="sexMale"
+                               value="Male" checked>
+                        <label class="form-check-label" for="sexMale">
                             Male
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
-                        <label class="form-check-label" for="gridRadios2">
+                        <input class="form-check-input" type="radio" name="sexCheckbox"
+                               id="sexFemale" value="Female">
+                        <label class="form-check-label" for="sexFemale">
                             Female
                         </label>
                     </div>
@@ -97,7 +117,7 @@
             </div>
         </div>
     </form>
-    <table class="table table-hover">
+    <table class="table table-hover" id="table">
         <thead>
         <tr>
             <th>First name</th>
@@ -127,6 +147,12 @@
         </tr>
         </tbody>
     </table>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary"
+                    onclick="return addRow();">Add row</button>
+        </div>
+    </div>
 </div>
 </body>
 </html>
