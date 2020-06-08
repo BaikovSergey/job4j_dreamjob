@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>AJAX</title>
+</head>
+<body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+<script>
+    function sendGreeting() {
+        var inputText = {
+            input: $('#exampleInputEmail').val()
+        };
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:8080/index.do/json",
+            data: {inputText: JSON.stringify(inputText)},
+            contentType: "application/json; charset=UTF-8"
+        }).done(function(data) {
+            var resp = JSON.parse(data);
+            $("h1").text("Inputted text: " + resp.input);
+        }).fail(function(data){
+            var resp = JSON.parse(data);
+            $("h1").text("Inputted text: " + resp.input);
+        });
+    }
+</script>
+<div class="container">
+    <h1></h1>
+</div>
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="exampleInputEmail">JSON Text</label>
+            <input type="text" class="form-control" id="exampleInputEmail"
+                   aria-describedby="emailHelp" placeholder="Enter email">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="sendGreeting()">Submit</button>
+    </form>
+</div>
+</body>
+</html>
