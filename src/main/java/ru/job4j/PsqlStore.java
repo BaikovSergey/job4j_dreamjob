@@ -106,6 +106,23 @@ public class PsqlStore implements Store {
     }
 
     @Override
+    public Map<Integer, String> findAllCities() {
+        Map<Integer, String> cities = new HashMap<>();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("SELECT * FROM ru_cities")
+        ) {
+            try (ResultSet it = ps.executeQuery()) {
+                while (it.next()) {
+                    cities.put(it.getInt("id"), it.getString("city"));
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Failed connecting to DB", e);
+        }
+        return cities;
+    }
+
+    @Override
     public Map<Integer, String> findAllCandidatePhoto() {
         Map<Integer, String> photos = new HashMap<>();
         try (Connection cn = pool.getConnection();

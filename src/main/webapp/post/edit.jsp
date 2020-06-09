@@ -18,6 +18,28 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Dream job!</title>
+    <script>
+        function validate() {
+            var result = true;
+            var fields = [document.getElementById("Name"), document.getElementById("Description")];
+
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].value === "") {
+                    result = false;
+                    break;
+                }
+            }
+
+            if (!result) {
+                for (var j = 0; j < fields.length; j++) {
+                    if (fields[j].value === "") {
+                        alert("Please fill this field: " + $(fields[j]).attr('name'));
+                    }
+                }
+            }
+            return result;
+        }
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -49,11 +71,12 @@
                 <form action="<%=request.getContextPath()%>/posts.do" method="post">
                     <div class="form-group">
                         <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <input type="text" class="form-control" name="Имя" id="Name">
                         <label>Описание</label>
-                        <input type="text" class="form-control" name="description">
+                        <input type="text" class="form-control" name="Описание" id="Description">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">
+                        Сохранить</button>
                 </form>
             </div>
         </div>

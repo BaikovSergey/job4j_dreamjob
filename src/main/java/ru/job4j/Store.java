@@ -12,6 +12,8 @@ public interface Store {
 
     Map<Integer, String> findAllCandidatePhoto();
 
+    Map<Integer, String> findAllCities();
+
     void savePost(Post post);
 
     void saveCandidate(Candidate candidate);

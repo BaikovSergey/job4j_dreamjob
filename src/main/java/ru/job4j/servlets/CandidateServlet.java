@@ -16,6 +16,7 @@ public class CandidateServlet extends HttpServlet {
             IOException {
         req.setAttribute("candidates", PsqlStore.instOf().findAllCandidates());
         req.setAttribute("candidatesPhotos", PsqlStore.instOf().findAllCandidatePhoto());
+        req.setAttribute("cities", PsqlStore.instOf().findAllCities());
         req.getRequestDispatcher("/candidate/candidates.jsp").forward(req, resp);
     }
 

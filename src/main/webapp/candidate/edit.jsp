@@ -16,8 +16,54 @@
             integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <title>Dream job!</title>
+    <script>
+        function validate() {
+            var result = true;
+            var fields = [document.getElementById("Name")];
+
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].value === "") {
+                    result = false;
+                    break;
+                }
+            }
+
+            if (!result) {
+                for (var j = 0; j < fields.length; j++) {
+                    if (fields[j].value === "") {
+                        alert("Please fill this field: " + $(fields[j]).attr('name'));
+                    }
+                }
+            }
+            return result;
+        }
+
+         $(document).ready(function() {
+             var load = true;
+             $("#CitySelect").click(function () {
+                 if (load === true) {
+                     $.ajax({
+                         type: 'GET',
+                         url: 'http://localhost:8080/index.do/candidates/edit.do',
+                         contentType: "application/json; charset=UTF-8"
+                     }).done(function(data) {
+                         var cities = JSON.parse(data);
+                         var cityList = $("#CitySelect");
+                         $.each(cities, function (key, value) {
+                                    cityList.append("<option value=" + key + ">" + value + "</option>");
+                                 });
+                     }).fail(function(data){
+                         alert(data);
+                     });
+                 }
+                 load = false;
+             });
+         });
+
+    </script>
 </head>
 <body>
 <div class="container pt-3">
@@ -48,10 +94,17 @@
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/candidates.do" method="post">
                     <div class="form-group">
-                        <label>Имя</label>
-                        <input type="text" class="form-control" name="name">
+                        <label for="Name">Имя</label>
+                        <input type="text" class="form-control" name="Имя" id="Name">
                     </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    <div class="form-group">
+                        <label for="CitySelect">Город</label>
+                        <select class="browser-default custom-select" id="CitySelect">
+                            <option value="none" hidden>Выберите город</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">
+                        Сохранить</button>
                 </form>
             </div>
         </div>

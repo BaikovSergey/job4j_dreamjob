@@ -40,6 +40,11 @@ public class PsqlStoreStub implements Store {
     }
 
     @Override
+    public Map<Integer, String> findAllCities() {
+        return null;
+    }
+
+    @Override
     public void savePost(Post post) {
         post.setId(this.postId++);
         this.posts.put(post.getId(), post);
