@@ -14,9 +14,6 @@ public class CandidateEditServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Map<Integer, String> cities = PsqlStore.instOf().findAllCities();
-        JSONObject json = new JSONObject(cities);
-        req.setAttribute("cities", json);
         req.getRequestDispatcher("/candidate/edit.jsp").forward(req, resp);
     }
 

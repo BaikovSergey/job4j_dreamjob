@@ -44,22 +44,21 @@
          $(document).ready(function() {
              var load = true;
              $("#CitySelect").click(function () {
-                 if (load === true) {
-                     $.ajax({
-                         type: 'GET',
-                         url: 'http://localhost:8080/index.do/candidates/edit.do',
-                         contentType: "application/json; charset=UTF-8"
-                     }).done(function(data) {
-                         var cities = JSON.parse(data);
-                         var cityList = $("#CitySelect");
-                         $.each(cities, function (key, value) {
-                                    cityList.append("<option value=" + key + ">" + value + "</option>");
-                                 });
-                     }).fail(function(data){
-                         alert(data);
-                     });
-                 }
-                 load = false;
+                    if (load === true) {
+                        $.ajax({
+                            type: "GET",
+                            url: "http://localhost:8080/index.do/cities.do"
+                        }).done(function(data) {
+                            var cities = JSON.parse(data);
+                            var cityList = $("#CitySelect");
+                            $.each(cities, function (key, value) {
+                                cityList.append("<option value=" + key + ">" + value + "</option>");
+                            });
+                            load = false;
+                        }).fail(function(){
+                            alert("Could not load data")
+                        });
+                    }
              });
          });
 

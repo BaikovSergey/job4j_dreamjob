@@ -102,4 +102,12 @@
         <servlet-name>GreetingServletJson</servlet-name>
         <url-pattern>/json</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>CitiesServlet</servlet-name>
+        <servlet-class>ru.job4j.servlets.CitiesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CitiesServlet</servlet-name>
+        <url-pattern>/cities.do</url-pattern>
+    </servlet-mapping>
 </web-app>
