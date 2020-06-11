@@ -57,6 +57,10 @@
                     <thead>
                     <tr>
                         <th scope="col">ФИО</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>

@@ -49,7 +49,8 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th scope="col">Названия</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Описание</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -60,6 +61,9 @@
                                     <i class="fa fa-edit mr-3"></i>
                                 </a>
                                 <c:out value="${post.name}"/>
+                            </td>
+                            <td>
+                                <c:out value="${post.description}"/>
                             </td>
                         </tr>
                     </c:forEach>

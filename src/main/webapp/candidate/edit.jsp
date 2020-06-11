@@ -22,7 +22,7 @@
     <script>
         function validate() {
             var result = true;
-            var fields = [document.getElementById("Name")];
+            var fields = [document.getElementById("Name"), document.getElementById("CitySelect")];
 
             for (var i = 0; i < fields.length; i++) {
                 if (fields[i].value === "") {
@@ -49,15 +49,14 @@
                             type: "GET",
                             url: "http://localhost:8080/index.do/cities.do"
                         }).done(function(data) {
-                            var cities = JSON.parse(data);
                             var cityList = $("#CitySelect");
-                            $.each(cities, function (key, value) {
-                                cityList.append("<option value=" + key + ">" + value + "</option>");
+                            $.each(data, function (key, value) {
+                                    cityList.append("<option value=" + key + ">" + value + "</option>");
                             });
-                            load = false;
-                        }).fail(function(){
+                        }).fail(function() {
                             alert("Could not load data")
                         });
+                        load = false;
                     }
              });
          });
@@ -98,7 +97,8 @@
                     </div>
                     <div class="form-group">
                         <label for="CitySelect">Город</label>
-                        <select class="browser-default custom-select" id="CitySelect">
+                        <select class="browser-default custom-select"  name="cityId"
+                                id="CitySelect">
                             <option value="none" hidden>Выберите город</option>
                         </select>
                     </div>

@@ -13,8 +13,9 @@ public class Candidate {
         this.name = name;
     }
 
-    public Candidate(String name) {
+    public Candidate(String name, int cityId) {
         this.name = name;
+        this.cityId = cityId;
     }
 
     public Candidate(int id, String name, int photoId) {
